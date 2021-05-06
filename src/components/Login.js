@@ -1,6 +1,7 @@
 import { Button, Form, Image } from 'react-bootstrap';
 import React, { Component } from 'react';
 import logo from '../assets/logo.png';
+import axios from 'axios'
 
 
 
@@ -71,10 +72,17 @@ class Login extends React.Component{
     }
 
     handleSubmit(event){
-        console.log('username: ', this.state.username);
-        console.log('password: ', this.state.password);
-        alert('A login form was submitted by ' + this.state.username);
+        axios.post('http://localhost:5000/login', {
+            username: this.state.username,
+            password: this.state.password
+        }).then((res) => {
+            const data = res.data;
+            const result = data['result'];
+            console.log("Backend Received: ", result);
+
+        });
         event.preventDefault();    
+
     }
 
     // ValidateForm(event){

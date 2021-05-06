@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Button, Form, Image } from 'react-bootstrap';
 
@@ -8,14 +9,33 @@ class NewInpectionForm extends React.Component{
             jobCardNumber: "",
             aircraftRegistrationNumber:"",
             startStationNumber:"",
-            EndStationNumber:"",
+            endStationNumber:"",
             buttockNumber :""
         }
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    handleSubmit() {
+    handleChange(event) {
+        const {name, value} = event.target;
+        this.setState({[name]: value})
+    }
+
+
+    handleSubmit(event) {
         console.log(this.state);
-        console.log('Submitted the form')
+        axios.post('http://localhost:5000/create', {
+            card_number: this.state.jobCardNumber,
+            aircraft_number: this.state.aircraftRegistrationNumber,
+            start: this.state.startStationNumber,
+            end: this.state.endStationNumber,
+            buttock: this.state.buttockNumber
+        }).then((res) => {
+            const data = res.data
+            const result = data.result
+            console.log("Backend Received new Inspection: ", result)
+        })
+        event.preventDefault();  
     }
 
     render(){
@@ -26,33 +46,43 @@ class NewInpectionForm extends React.Component{
                     <Form.Group     controlId="formJobCardNumber">
                     <Form.Control 
                         type="text" 
-                        placeholder="Job Card Number" />
+                        name="jobCardNumber"
+                        placeholder="Job Card Number"
+                        onChange={this.handleChange}/>
                      </Form.Group>
 
                     <Form.Group controlId="formAircraftRegistrationNumber">
                     <Form.Control 
                         type="text" 
-                        placeholder="Aircraft Registration Number" />
+                        name="aircraftRegistrationNumber"
+                        placeholder="Aircraft Registration Number"
+                        onChange={this.handleChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formStartStationNumber">
                     <Form.Control 
                         type="text" 
-                        placeholder="Start Station Number" />
+                        name="startStationNumber"
+                        placeholder="Start Station Number"
+                        onChange={this.handleChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formEndStationNumber">
                     <Form.Control 
                         type="text" 
-                        placeholder="End Station Number" />
+                        name="endStationNumber"
+                        placeholder="End Station Number"
+                        onChange={this.handleChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formButtockNumber">
                     <Form.Control 
                         type="text" 
-                        placeholder="Buttock Number" />
+                        name ="buttockNumber"
+                        placeholder="Buttock Number"
+                        onChange={this.handleChange}/>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button onClick={this.handleSubmit} variant="primary" type="submit">
                     Submit
                     </Button>
             </Form>; 

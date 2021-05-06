@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect, BrowserRouter } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
 import NewInspection from './components/NewInspection'
@@ -36,7 +36,14 @@ import NewInspection from './components/NewInspection'
 
 ReactDOM.render(
     // HTML code that will be displayed in the HTML element
-    <Login />,
+    <BrowserRouter>
+        <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/create" component={NewInspection}/>
+            <Route path="/home" component={Home}/>
+            <Redirect from="/" to="/login" />
+        </Switch>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 
